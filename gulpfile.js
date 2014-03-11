@@ -1,7 +1,7 @@
 // Инициализируем плагины
 var lr = require('tiny-lr'), // Минивебсервер для livereload
     gulp = require('gulp'), // Сообственно Gulp JS
-    jade = require('gulp-jade'), // Плагин для Jade
+    // jade = require('gulp-jade'), // Плагин для Jade
     stylus = require('gulp-stylus'), // Плагин для Stylus
     livereload = require('gulp-livereload'), // Livereload для Gulp
     myth = require('gulp-myth'), // Плагин для Myth - http://www.myth.io/
@@ -15,7 +15,7 @@ var lr = require('tiny-lr'), // Минивебсервер для livereload
 
 // Собираем Stylus
 gulp.task('stylus', function() {
-    gulp.src('./assets/stylus/screen.styl')
+    gulp.src('./assets/stylus/main.styl')
         .pipe(stylus({
             use: ['nib']
         })) // собираем stylus
@@ -29,11 +29,11 @@ gulp.task('stylus', function() {
 
 // Собираем html из Jade
 
-gulp.task('jade', function() {
-    gulp.src(['./assets/template/*.jade', '!./assets/template/_*.jade'])
-        .pipe(jade({
-            pretty: true
-        }))  // Собираем Jade только в папке ./assets/template/ исключая файлы с _*
+gulp.task('html', function() {
+    gulp.src(['./assets/template/*.html', '!./assets/template/_*.html'])
+        // .pipe(jade({
+        //     pretty: true
+        // }))  // Собираем Jade только в папке ./assets/template/ исключая файлы с _*
         .on('error', console.log) // Если есть ошибки, выводим и продолжаем
     .pipe(gulp.dest('./public/')) // Записываем собранные файлы
     .pipe(livereload(server)); // даем команду на перезагрузку страницы
@@ -76,7 +76,7 @@ gulp.task('http-server', function() {
 gulp.task('default', function() {
     // Предварительная сборка проекта
     gulp.run('stylus');
-    gulp.run('jade');
+    gulp.run('html');
     gulp.run('images');
     gulp.run('js');
 
@@ -87,8 +87,8 @@ gulp.task('default', function() {
         gulp.watch('assets/stylus/**/*.styl', function() {
             gulp.run('stylus');
         });
-        gulp.watch('assets/template/**/*.jade', function() {
-            gulp.run('jade');
+        gulp.watch('assets/template/**/*.html', function() {
+            gulp.run('html');
         });
         gulp.watch('assets/img/**/*', function() {
             gulp.run('images');
@@ -111,8 +111,8 @@ gulp.task('build', function() {
     .pipe(gulp.dest('./build/css/')) // записываем css
 
     // jade
-    gulp.src(['./assets/template/*.jade', '!./assets/template/_*.jade'])
-        .pipe(jade())
+    gulp.src(['./assets/template/*.html', '!./assets/template/_*.html'])
+        // .pipe(jade())
         .pipe(gulp.dest('./build/'))
 
     // js
