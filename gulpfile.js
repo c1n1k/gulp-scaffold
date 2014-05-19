@@ -43,8 +43,8 @@ gulp.task('html', function() {
 
 // Собираем JS
 gulp.task('js', function() {
-    gulp.src(['./assets/js/**/*.js', '!./assets/js/vendor/**/*.js'])
-        .pipe(concat('index.js')) // Собираем все JS, кроме тех которые находятся в ./assets/js/vendor/**
+    gulp.src(['./assets/js/plugins.js','./assets/js/**/*.js', '!./assets/js/vendor/**/*.js'])
+        .pipe(concat('main.js')) // Собираем все JS, кроме тех которые находятся в ./assets/js/vendor/**
         .pipe(gulp.dest('./public/js'))
         .pipe(livereload(server)); // даем команду на перезагрузку страницы
 });
@@ -102,7 +102,7 @@ gulp.task('default', function() {
 
 gulp.task('build', function() {
     // css
-    gulp.src('./assets/stylus/screen.styl')
+    gulp.src('./assets/stylus/main.styl')
         .pipe(stylus({
             use: ['nib']
         })) // собираем stylus
