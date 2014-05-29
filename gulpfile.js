@@ -25,6 +25,18 @@ gulp.task('stylus', function() {
     .pipe(livereload(server)); // даем команду на перезагрузку css
 });
 
+// Собираем Stylus ie
+gulp.task('stylus_ie', function() {
+    gulp.src('./assets/stylus/ie.styl')
+        .pipe(stylus({
+            use: ['nib']
+        })) // собираем stylus
+    .on('error', console.log) // Если есть ошибки, выводим и продолжаем
+    .pipe(myth()) // добавляем префиксы - http://www.myth.io/
+    .pipe(gulp.dest('./public/css/')) // записываем css
+    .pipe(livereload(server)); // даем команду на перезагрузку css
+});
+
 
 
 // Собираем html из Jade
@@ -76,6 +88,7 @@ gulp.task('http-server', function() {
 gulp.task('default', function() {
     // Предварительная сборка проекта
     gulp.run('stylus');
+    gulp.run('stylus_ie');
     gulp.run('html');
     gulp.run('images');
     gulp.run('js');
@@ -86,6 +99,9 @@ gulp.task('default', function() {
 
         gulp.watch('assets/stylus/**/*.styl', function() {
             gulp.run('stylus');
+        });
+        gulp.watch('assets/stylus/ie.styl', function() {
+            gulp.run('stylus_ie');
         });
         gulp.watch('assets/template/**/*.html', function() {
             gulp.run('html');
@@ -103,6 +119,15 @@ gulp.task('default', function() {
 gulp.task('build', function() {
     // css
     gulp.src('./assets/stylus/main.styl')
+        .pipe(stylus({
+            use: ['nib']
+        })) // собираем stylus
+    .pipe(myth()) // добавляем префиксы - http://www.myth.io/
+    .pipe(csso()) // минимизируем css
+    .pipe(gulp.dest('./build/css/')) // записываем css
+
+    // css ie
+    gulp.src('./assets/stylus/ie.styl')
         .pipe(stylus({
             use: ['nib']
         })) // собираем stylus
